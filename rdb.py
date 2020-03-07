@@ -1,16 +1,12 @@
 import os
-import discord
 import random
 from discord.ext.commands import Bot
 from discord.ext import tasks
-import asyncio
-import time
 import datetime
 from bs4 import BeautifulSoup
 import requests
 
 
-# client = discord.Client()
 token = os.getenv('DISCORDAPI')
 client = Bot(command_prefix='$')
 
@@ -41,21 +37,19 @@ async def on_message(message):
                 memList.append(x)
     if len(memList):
         cap1 = random.choice(memList)
-        # await message.channel.send(cap.name)
         user = await cap1.create_dm()
         await user.send(cap1Link)
         memList.remove(cap1)
         cap2 = random.choice(memList)
-        # await message.channel.send(cap.name)
         user = await cap2.create_dm()
-        await user.send(cap1Link)
+        await user.send(cap2Link)
 
         await message.channel.send("""
 @here - Here are the links for the next 10 man. {3}
 
 :red_square: :red_square: :red_square: :red_square: :red_square: :red_square: :red_square: :red_square: :red_square: :red_square: :red_square: :red_square: :red_square:
 
-Scrim Links: 
+Scrim Links:
 :desktop: - <https://popflash.site/scrim/UGRscrim1>
 :earth_americas: - {0}
 
@@ -64,16 +58,6 @@ Scrim Links:
 
 :red_square: :red_square: :red_square: :red_square: :red_square: :red_square: :red_square: :red_square: :red_square: :red_square: :red_square: :red_square: :red_square:
 """.format(viewerLink, cap1.name, cap2.name, client.get_emoji(484465825236123659)))
-
-
-def linker():
-    page = requests.get("https://www.mapban.gg/en/ban/csgo/esl/bo1")
-    soup = BeautifulSoup(page.content, 'html.parser')
-    links = soup.find_all('input')
-    cap1 = links[1]['value']
-    cap2 = links[0]['value']
-    viewer = links[2]['value']
-
 
 
 @tasks.loop(minutes=1)
